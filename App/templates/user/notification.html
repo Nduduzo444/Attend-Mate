@@ -1,0 +1,51 @@
+{% extends "user/layout.html" %}
+{% block content %}
+<div class="container">
+
+<h2>Your Notifications</h2>
+
+<div class="mb-3">
+    <input type="text" id="searchInput" class="form-control" placeholder="Search notifications..." onkeyup="filterNotifications()">
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Message</th>
+            <th>Time</th>
+            
+        </tr>
+    </thead>
+    <tbody id="notificationTable">
+        {% for notification in notifications %}
+        <tr>
+            <td>{{ notification.message }}</td>
+            <td>{{ notification.timestamp.strftime('%H:%M, %Y-%m-%d') }}</td>
+                
+            
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<script>
+function filterNotifications() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById('notificationTable');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName('td');
+        if (cells.length > 0) {
+            const message = cells[0].textContent || cells[0].innerText;
+            rows[i].style.display = message.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+        }
+    }
+}
+
+
+</script>
+</div>
+{% endblock %}

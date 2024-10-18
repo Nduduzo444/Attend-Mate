@@ -1,0 +1,260 @@
+{% extends "user/layout.html" %}
+{% block content %}
+<title>Parent Dashboard</title>
+<!-- Load Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">  
+
+<style>
+    /* Basic Styles */
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    /* Dashboard Grid Layout */
+    .dashboard-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        overflow-y: auto; /* Allow vertical scrolling */
+        max-height: 400px; /* Set a maximum height */
+        padding: 10px;
+        border: 1px solid #ddd; /* Optional: Add a border for visibility */
+        border-radius: 10px; /* Match container's border radius */
+    }
+
+    .card {
+        background-color: #5fa2ea; /* Primary blue color */
+        color: white;
+        padding: 20px;
+        margin: 15px;
+        flex: 1 1 calc(45% - 30px);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+        position: relative;
+    }
+
+    .card:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+
+    .notification-badge {
+        background-color: #ffc107; /* Yellow for notifications */
+        color: black;
+        border-radius: 50%;
+        padding: 5px 10px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 12px;
+    }
+
+    .card h3 {
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+
+    .card p {
+        font-size: 14px;
+        color: #e8e8e8;
+    }
+
+    .card a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        border: 2px solid white;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .card a:hover {
+        background-color: white;
+        color: #007bff;
+    }
+
+    /* Custom button for user greeting */
+    .user-greeting {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-bottom: 30px;
+    }
+
+    .user-greeting .icon {
+        margin-right: 10px;
+        color: #e2d650;
+    }
+
+    .user-greeting .username {
+        font-size: 20px;
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+        .card {
+            flex: 1 1 100%;
+        }
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; 
+        z-index: 1; 
+        left: 0;
+        top: 0;
+        width: 100%; 
+        height: 100%; 
+        overflow: auto; 
+        background-color: rgb(0,0,0); 
+        background-color: rgba(0,0,0,0.4); 
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto; 
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; 
+        max-width: 400px; 
+        border-radius: 10px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container">
+    <div class="user-greeting">
+        <span class="username">Hello, {{ session.fname }}<i class="fas fa-hand-paper icon"></i></span>
+    </div>
+
+    <h2 class="text-center mb-4">Parent Dashboard</h2>
+
+    <div class="dashboard-grid">
+        <div class="card">
+            <h3>Notify School</h3>
+            <p>Notify the school about your child's arrival, departure, or absence. Keep the school informed for accurate attendance records.</p>
+            <a href="/user/notify-school" class="btn btn-primary">Notify School</a>
+        </div>
+        
+        <!-- Notifications -->
+        <div class="card position-relative">
+            <h3>Notifications</h3>
+            <p>Receive updates on your child's arrival and departure.</p>
+            <span class="notification-badge">{{ unread_count }}</span>
+            <a href="/user/notification">View Notifications</a>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Manage Child</h3>
+                <p class="card-text">Update your child's details, including grade and personal information.</p>
+                <a href="/user/manage-child" class="btn btn-primary">Manage Child</a>
+            </div>
+        </div>
+        
+
+        <!-- Profile Settings -->
+        <div class="card">
+            <h3>Profile Settings</h3>
+            <p>Update your contact details and change your password.</p>
+            <a href="/user/profile-settings">Profile Settings</a>
+        </div>
+
+        <!-- Add Child (New Feature) -->
+        <div class="card">
+            <h3>Add Child</h3>
+            <p>Register your child's details in the system.</p>
+            <a href="#" id="addChildButton">Add Child</a>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Confirm Action</h2>
+        <p>Are you sure you want to add a new child?</p>
+        <button id="confirmAddChild" class="btn btn-primary">Yes</button>
+        <button id="cancelAddChild" class="btn btn-secondary">No</button>
+    </div>
+</div>
+
+<script>
+    // Get modal element
+    var modal = document.getElementById("confirmationModal");
+
+    // Get button that opens the modal
+    var addChildButton = document.getElementById("addChildButton");
+
+    // Get <span> element that closes the modal
+    var closeModal = document.getElementsByClassName("close")[0];
+
+    // Get buttons for confirmation and cancellation
+    var confirmAddChild = document.getElementById("confirmAddChild");
+    var cancelAddChild = document.getElementById("cancelAddChild");
+
+    // When the user clicks the button, open the modal 
+    addChildButton.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    closeModal.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks on the cancel button, close the modal
+    cancelAddChild.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks on the confirm button
+    confirmAddChild.onclick = function() {
+        window.location.href = "/user/add_child"; // Redirect to the add child page
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+{% endblock content %}
+

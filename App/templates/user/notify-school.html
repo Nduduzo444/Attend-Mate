@@ -1,0 +1,48 @@
+{% extends "user/layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center my-3">Notify School Authority</h2>
+
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" class="mt-3">
+                        <div class="form-group">
+                            <label for="child_id">Select Child:</label>
+                            <select name="child_id" id="child_id" class="form-control" required>
+                                {% for child in children %}
+                                <option value="{{ child.id }}">{{ child.full_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="status">Select Status:</label>
+                            <select name="status" id="status" class="form-control" required>
+                                <option value="arrived">Arrived Home</option>
+                                <option value="departed">Departed Home</option>
+                                <option value="absent">Absent</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block mt-3">Send Alert</button>
+                    </form>
+
+                    {% if get_flashed_messages(with_categories=true) %}
+                    <div class="mt-3">
+                        <ul class="list-unstyled">
+                            {% for category, message in get_flashed_messages(with_categories=true) %}
+                            <li class="alert alert-{{ 'success' if category == 'success' else 'danger' }}">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

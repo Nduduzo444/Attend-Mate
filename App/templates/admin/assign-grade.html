@@ -1,0 +1,24 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<div class="container">
+    <h2>Assign Grade to {{ user.fname }} {{ user.lname }} (Authority)</h2>
+    
+    <form action="" method="POST">
+        <div class="form-group">
+            <label for="grade">Select Grade to Manage</label>
+            <select name="grade" id="grade" class="form-control">
+                <option value="0">Grade R</option>
+                <option value="1">Grade 1</option>
+                <option value="2">Grade 2</option>
+                <option value="3">Grade 3</option>
+                <option value="4">Grade 4</option>
+                <option value="5">Grade 5</option>
+                <option value="6">Grade 6</option>
+                <option value="7">Grade 7</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Assign Grade</button>
+        <a href="/admin/all-users" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

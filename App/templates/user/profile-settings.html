@@ -1,0 +1,157 @@
+{% extends "user/layout.html" %}
+
+{% block content %}
+<div class="container" style="max-height: 80vh; overflow-y: auto;">
+    <h1 class="text-center my-3">Profile Settings</h1>
+
+    <!-- Flash Message (if any) -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Profile form section -->
+    <div class="row d-flex justify-content-center">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <form id="profileForm" class="needs-validation" method="POST" novalidate>
+                        <div class="mb-2">
+                            <label for="fname"><b>First Name</b></label>
+                            <div class="input-group mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" name="fname" id="fname" class="form-control" value="{{ user['fname'] }}" required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid name.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="lname"><b>Last Name</b></label>
+                            <div class="input-group mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" name="lname" id="lname" class="form-control" value="{{ user['lname'] }}" required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid surname.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="username"><b>Contact Number</b></label>
+                            <div class="input-group mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                </div>
+                                <input type="text" name="username" id="username" class="form-control" value="{{ user['username'] }}" required maxlength="10" pattern="\d{10}">
+                                <div class="invalid-feedback">
+                                    Contact number must be exactly 10 digits long.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="email"><b>Email Address</b></label>
+                            <div class="input-group mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input type="email" name="email" id="email" class="form-control" value="{{ user['email'] }}" required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid email address.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="password"><b>Password</b></label>
+                            <div class="input-group mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                </div>
+                                <input type="password" name="password" id="password" class="form-control" minlength="8" placeholder="Leave blank if unchanged">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Password must be at least 8 characters long.
+                                </div>
+                            </div>
+                            <small id="passwordHelp" class="form-text text-muted">
+                                Leave blank if you don't want to change the password.
+                            </small>
+                        </div>
+
+                        <button type="submit" class="btn btn-success mt-2">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast for successful profile update -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
+    <div id="updateToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Notification</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Your profile was successfully updated!
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+
+        // Toggle password visibility
+        const togglePassword = document.getElementById("togglePassword");
+        togglePassword.addEventListener("click", function() {
+            const passwordField = document.getElementById("password");
+            const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+            passwordField.setAttribute("type", type);
+            this.querySelector("i").classList.toggle("fa-eye-slash");
+        });
+
+        // Show toast if a success flash message exists
+        document.addEventListener("DOMContentLoaded", function() {
+            const flashSuccess = "{{ 'success' in get_flashed_messages(with_categories=True) }}";
+            if (flashSuccess) {
+                const toastElement = document.getElementById('updateToast');
+                const toast = new bootstrap.Toast(toastElement);
+                toast.show();
+            }
+        });
+    })();
+</script>
+{% endblock content %}

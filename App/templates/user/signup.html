@@ -1,0 +1,253 @@
+{% extends "user/layout.html" %}
+
+{% block content %}
+<div class="container" style="max-height: 80vh; overflow-y: auto;">
+    <h1 class="text-center my-3">Member Registration</h1>
+
+    <!-- Registration form section -->
+    <div class="row d-flex justify-content-center">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <form id="registrationForm" class="needs-validation" method="POST" novalidate>
+                        <div class="mb-2">
+                            <label for="fname"><b>Enter your first name</b></label>
+                            <div class="input-group mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" name="fname" id="fname" class="form-control" required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid name without numbers or special characters.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="lname"><b>Enter your last name</b></label>
+                            <div class="input-group mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" name="lname" id="lname" class="form-control" required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid surname without numbers or special characters.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="username"><b>Enter your contact number</b></label>
+                            <div class="input-group mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                </div>
+                                <input type="text" name="username" id="username" class="form-control" required maxlength="10" pattern="\d{10}">
+                                <div class="invalid-feedback">
+                                    Contact number must be exactly 10 digits long and contain only numbers.
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="mb-2">
+                            <label for="email"><b>Enter your email address</b></label>
+                            <div class="input-group mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input type="email" name="email" id="email" class="form-control" required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid email address, always includes '@'.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="password"><b>Enter your password</b></label>
+                            <div class="input-group mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                </div>
+                                <input type="password" name="password" id="password" class="form-control" required minlength="8">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Password must be at least 8 characters long and include a special character.
+                                </div>
+                            </div>
+                            <small id="passwordHelp" class="form-text text-muted">
+                                Your password must be at least 8 characters long and include at least one special character.
+                            </small>
+                        </div>
+
+                        <button type="submit" class="btn btn-success mt-2">Register</button>
+                        <span class="d-flex align-items-center">Already have an account? 
+                            <a href="/user/" class="text-center nav-link">Login</a>
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for error/success messages -->
+<div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="messageBody">
+                <!-- Message will be injected here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Bootstrap validation and other logic here...
+    // Bootstrap validation
+    // Bootstrap validation and other logic here...
+(function () {
+    'use strict';
+    var forms = document.querySelectorAll('.needs-validation');
+
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+
+    // Function to check for invalid characters in name fields
+    function validateNameInput(inputField) {
+        const invalidFeedback = inputField.nextElementSibling; // Get the invalid feedback element
+        if (/[0-9!@#$%^&*()_+={}\[\]:;"'<>,.?\/\\|`~]/.test(inputField.value)) {
+            inputField.setCustomValidity('Please enter a valid name without numbers or special characters.');
+            invalidFeedback.style.display = 'block'; // Show invalid feedback
+        } else {
+            inputField.setCustomValidity('');
+            invalidFeedback.style.display = 'none'; // Hide invalid feedback
+        }
+    }
+
+    // Function to validate the contact number (username) input
+    function validateContactNumberInput(inputField) {
+        const invalidFeedback = inputField.nextElementSibling; // Get the invalid feedback element
+        const contactNumber = inputField.value;
+
+        // Check if the contact number is valid (starts with 0, 10 digits long, and contains only numbers)
+        const isValid = /^[0][0-9]{9}$/.test(contactNumber);
+
+        if (!isValid) {
+            inputField.setCustomValidity('Contact number must start with 0 and contain exactly 10 digits.');
+            invalidFeedback.style.display = 'block'; // Show invalid feedback
+        } else {
+            inputField.setCustomValidity('');
+            invalidFeedback.style.display = 'none'; // Hide invalid feedback
+        }
+    }
+
+    // Function to validate the email input
+    function validateEmailInput(inputField) {
+        const invalidFeedback = inputField.nextElementSibling; // Get the invalid feedback element
+        const emailValue = inputField.value;
+
+        // Check for invalid characters
+        if (/[^\w@._-]/.test(emailValue)) {
+            inputField.setCustomValidity('Please enter a valid email address without invalid characters.');
+            invalidFeedback.style.display = 'block'; // Show invalid feedback
+        } else if (!emailValue.includes('@')) {
+            inputField.setCustomValidity('Please enter a valid email address that includes "@"');
+            invalidFeedback.style.display = 'block'; // Show invalid feedback
+        } else {
+            inputField.setCustomValidity('');
+            invalidFeedback.style.display = 'none'; // Hide invalid feedback
+        }
+    }
+
+    // Attach input event listeners to name fields
+    document.getElementById("fname").addEventListener('input', function() {
+        validateNameInput(this);
+    });
+    document.getElementById("lname").addEventListener('input', function() {
+        validateNameInput(this);
+    });
+    
+    // Attach input event listener to the contact number (username) field
+    const contactNumberField = document.getElementById("username");
+    contactNumberField.addEventListener('input', function() {
+        validateContactNumberInput(this);
+    });
+
+    // Attach input and blur event listener to the email field
+    const emailField = document.getElementById("email");
+    emailField.addEventListener('input', function() {
+        validateEmailInput(this);
+    });
+    emailField.addEventListener('blur', function() {
+        validateEmailInput(this); // Validate on blur to show error immediately
+    });
+
+    // Function to validate password strength
+    function validatePasswordInput(inputField) {
+        const invalidFeedback = inputField.nextElementSibling; // Get the invalid feedback element
+        const passwordValue = inputField.value;
+        
+        // Check for minimum length and special characters
+        const isValid = passwordValue.length >= 8 && /[!@#$%^&*(),.?":{}|<>]/.test(passwordValue);
+        
+        if (!isValid) {
+            inputField.setCustomValidity('Password must be at least 8 characters long and include a special character.');
+            invalidFeedback.style.display = 'block'; // Show invalid feedback
+        } else {
+            inputField.setCustomValidity('');
+            invalidFeedback.style.display = 'none'; // Hide invalid feedback
+        }
+    }
+
+    // Attach input event listener to the password field
+    const passwordField = document.getElementById("password");
+    passwordField.addEventListener('input', function() {
+        validatePasswordInput(this);
+    });
+
+    // Toggle password visibility
+    const togglePassword = document.getElementById("togglePassword");
+    togglePassword.addEventListener("click", function() {
+        const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+        passwordField.setAttribute("type", type);
+        this.querySelector("i").classList.toggle("fa-eye-slash");
+    });
+
+    // Show error or success modal if there's a message
+    const errorMessage = "{{ error_message }}"; // Flask variable
+    const successMessage = "{{ success_message }}"; // Flask variable
+
+    if (errorMessage) {
+        document.getElementById("messageBody").innerText = errorMessage;
+        $('#messageModal').modal('show');
+    } else if (successMessage) {
+        document.getElementById("messageBody").innerText = successMessage;
+        $('#messageModal').modal('show');
+    }
+})();
+
+</script>
+
+{% endblock content %}

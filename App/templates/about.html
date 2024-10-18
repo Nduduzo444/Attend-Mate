@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Attend Mate - About Us </title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
+        body {
+            background-image: url('static/background.jpg'); /* Replace with your image path */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+            position: relative;
+        }
+
+        /* Dark overlay for better contrast */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+            z-index: 1;
+        }
+
+        /* Ensures content is above the overlay */
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+
+        h1, h3, a {
+            color: white;
+        }
+
+        .card {
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+            border: none;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent container */
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <div class="container my-5">
+            <div class="d-flex justify-content-center align-items-center">
+                <h1>About Attend Mate</h1>
+            </div>
+            <hr>
+        </div>
+
+        <div class="container">
+            <h3>Our Mission</h3>
+            <p>
+                Attend Mate is dedicated to creating a secure and efficient system for schools to monitor student attendance and communicate arrival and departure statuses with parents in real-time.
+            </p>
+
+            <h3>What We Do</h3>
+            <p>
+                Our platform provides a seamless way for school authorities to track students' attendance, ensuring safety and security, while parents receive timely notifications about their child's in-time and out-time.
+            </p>
+
+            <h3>Our Vision</h3>
+            <p>
+                To build a safer school environment by bridging the communication gap between schools and parents using technology.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

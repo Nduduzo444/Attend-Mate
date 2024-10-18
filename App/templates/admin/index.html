@@ -1,0 +1,116 @@
+{% extends "admin/layout.html" %}
+
+{% block content %}
+
+<div class="content-wrapper">
+    <div class="container my-5">
+        <div class="d-flex justify-content-center align-items-center">
+            <img style="width: 10%;" src="{{ url_for('static', filename='administrator.png') }}" alt="Admin">
+            <h1 class="ms-2">Admin Login</h1>
+        </div>
+        <hr class="my-4" style="border-color: #07a42c;">
+    </div>
+
+    <!-- Modal for error messages -->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="errorMessage">
+                    <!-- Error message will be injected here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+
+                    <!-- Login form -->
+                    <form id="loginForm" method="POST" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="username"><b>Enter your username</b></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" name="username" id="username" class="form-control" required>
+                                <div class="invalid-feedback">
+                                    Please enter your username.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password"><b>Password</b></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                </div>
+                                <input type="password" name="password" id="password" class="form-control" required>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please enter your password.
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success mt-2">Login</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Bootstrap validation
+    (function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+
+        // Toggle password visibility
+        const togglePassword = document.getElementById("togglePassword");
+        const passwordField = document.getElementById("password");
+        togglePassword.addEventListener("click", function() {
+            const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+            passwordField.setAttribute("type", type);
+            this.querySelector("i").classList.toggle("fa-eye-slash");
+        });
+
+        // Show error modal if there's an error message
+        const errorMessage = "{{ error_message|safe }}"; // Flask variable
+        if (errorMessage) {
+            document.getElementById("errorMessage").innerText = errorMessage;
+            $('#errorModal').modal('show');
+        }
+    })();
+</script>
+
+{% endblock content %}
