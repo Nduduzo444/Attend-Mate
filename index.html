@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attend Mate</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('static/background.jpg'); /* Replace with your image path */
+            background-size: cover;
+            background-position: center;
+            
+            color: white;
+            position: relative;
+        }
+
+        /* Dark overlay for better contrast */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Dark overlay */
+            z-index: 1;
+        }
+
+        /* Ensures content is above the overlay */
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            padding: 50px 15px; /* Added padding */
+        }
+
+        h1, h3, a {
+            color: white;
+        }
+
+        .card {
+            background-color: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
+            border: none;
+            border-radius: 20px; /* Specify the desired rounded size */
+            transition: transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Shadow effect */
+        }
+
+        .card:hover {
+            transform: translateY(-5px); /* Lift effect on hover */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); /* Increased shadow on hover */
+        }
+
+        .nav-link {
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #ffc107; /* Change color on hover */
+        }
+
+        .container {
+            padding: 30px;
+            border-radius: 15px; /* Ensure container also has rounded corners */
+            margin-bottom: 30px; /* Added bottom margin for spacing */
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <div class="container my-5 text-center">
+            <h1>Welcome to Attend Mate</h1>
+            <hr class="my-4" style="border-color: #ffc107;">
+            <p class="lead">Your one-stop solution for school attendance management.</p>
+        </div>
+
+        <div class="container">
+            <div class="row justify-content-center"> <!-- Center the row -->
+                <div class="col-md-4">
+                    <div class="card m-3">
+                        <div class="card-body bg-success rounded"> <!-- Removed rounded class -->
+                            <h3 class="card-title">User Login</h3>
+                            <a href="/user/" class="nav-link">Login</a>
+                        </div>
+                    </div>
+                </div>
+
+              
+                <div class="col-md-4">
+                    <div class="card m-3">
+                        <div class="card-body bg-danger rounded"> <!-- Removed rounded class -->
+                            <h3 class="card-title">Admin Login</h3>
+                            <a href="/admin/" class="nav-link">Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+ 
